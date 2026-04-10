@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='icon.png') }}">
+    <title>Blob Alliance - Home</title>
+</head>
+<body>
+
+    <nav>
+
+        <div class="nav-button-div">
+
+            <img class="nav-icon" src="{{ url_for('static', filename='icon.png') }}">
+            <p class="nav-title">Blob Alliance</p>
+
+        </div>
+
+        <div class="nav-button-div">
+
+            <div class="nav-button-div">
+
+                <a class="nav-button" href="/">Home</a>
+                <a class="nav-button" href="/status">Status</a>
+                <a class="nav-button" href="/apply">Apply</a>
+            
+            </div>
+
+        {% if user %}
+
+            {% if "1409539465021624350" in user["roles"] or "1469462892955963515" in user["roles"] %}
+
+                <a class="nav-button" href="/review">Review</a>
+                <a class="nav-button" href="/overview">Overview</a>
+                <a class="nav-button" href="/create">Create</a>
+
+            {% endif %}
+
+            <a class="profile-button" href="/profile">
+                <p class="profile-button-text">{{ user.global_name }}</p>
+                <img class="profile-button-avatar" src="https://cdn.discordapp.com/avatars/{{ user.id }}/{{ user.avatar }}.png">
+            </a>
+
+        {% else %}
+            
+            <a class="login-button" href="/login">Login with Discord</a>
+
+        {% endif %}
+        
+        </div>
+
+    </nav>
+
+    <main>
+        <p class="title">Welcome to Blob Alliance</p>
+        <p class="text">Under construction...</p>
+    </main>
+
+</body>
+</html>

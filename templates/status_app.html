@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='icon.png') }}">
+    <title>Blob Alliance - Apply</title>
+</head>
+<body>
+
+    <nav>
+
+        <div class="nav-button-div">
+
+            <img class="nav-icon" src="{{ url_for('static', filename='icon.png') }}">
+            <p class="nav-title">Blob Alliance</p>
+
+        </div>
+
+        <div class="nav-button-div">
+
+            <div class="nav-button-div">
+
+                <a class="nav-button" href="/">Home</a>
+                <a class="nav-button" href="/status">Status</a>
+                <a class="nav-button" href="/apply">Apply</a>
+
+        {% if user %}
+            
+            {% if "1409539465021624350" in user["roles"] or "1469462892955963515" in user["roles"] %}
+
+                <a class="nav-button" href="/review">Review</a>
+                <a class="nav-button" href="/overview">Overview</a>
+                <a class="nav-button" href="/create">Create</a>
+
+            {% endif %}
+
+            <a class="profile-button" href="/profile">
+                <p class="profile-button-text">{{ user.global_name }}</p>
+                <img class="profile-button-avatar" src="https://cdn.discordapp.com/avatars/{{ user.id }}/{{ user.avatar }}.png">
+            </a>
+
+        {% else %}
+            
+            <a class="login-button" href="/login">Login with Discord</a>
+
+        {% endif %}
+        
+        </div>
+
+    </nav>
+
+    <main>
+
+        <h class="title">{{ apps[id]["name"] }}</h>
+        <p class="description">Hello {{ user.global_name }}! Your application was submitted.</p>
+
+        <br>
+
+        <p class="description">Your applications status is</p>
+
+        {% if apps[id]["submissions"][user.id]["status"] == "pending" %}
+
+            <p class="title" style="color: #F0B232;">PENDING</p>
+
+        {% elif apps[id]["submissions"][user.id]["status"] == "review" %}
+
+            <p class="title" style="color: #F0B232;">IN REVIEW</p>
+
+        {% elif apps[id]["submissions"][user.id]["status"] == "accepted" %}
+
+            <p class="title" style="color: #23A559;">ACCEPTED</p>
+            <p class="description">You should have the role connected to the application in the Discord server.</p>
+
+        {% elif apps[id]["submissions"][user.id]["status"] == "denied" %}
+
+            <p class="title" style="color: #DA373C;">DENIED</p>
+            <p class="description">You did your best, you can still apply for other applications. After a month this application is deleted and you can reapply again if the application is open.</p>
+
+        {% endif %}
+
+        <br>
+
+        {% for question_id, question in apps[id]["questions"].items() %}
+            
+            <p class="text">{{ question["name"] }}</p>
+            <p class="description">{{ question["description"] }}</p>
+        
+            {% if question["method"] == "text" %}
+
+                <p class="text-field">{{ apps[id]["submissions"][user.id]["answers"][question_id]["answer"] }}</p>
+
+            {% elif question["method"] == "number" %}
+
+                <p class="number-input">{{ apps[id]["submissions"][user.id]["answers"][question_id]["answer"] }}</p>    
+
+            {% elif question["method"] == "name" %}
+
+                <p class="text-input">{{ apps[id]["submissions"][user.id]["answers"][question_id]["answer"] }}</p>
+
+            {% elif question["method"] == "rate" %}
+
+                <p class="button">{{ apps[id]["submissions"][user.id]["answers"][question_id]["answer"] }}</p>
+
+            {% endif %}
+
+        {% endfor %}
+
+    </main>
+
+</body>
+</html>

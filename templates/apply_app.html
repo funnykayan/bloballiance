@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='icon.png') }}">
+    <title>Blob Alliance - Apply</title>
+</head>
+<body>
+
+    <nav>
+
+        <div class="nav-button-div">
+
+            <img class="nav-icon" src="{{ url_for('static', filename='icon.png') }}">
+            <p class="nav-title">Blob Alliance</p>
+
+        </div>
+
+        <div class="nav-button-div">
+
+            <div class="nav-button-div">
+
+                <a class="nav-button" href="/">Home</a>
+                <a class="nav-button" href="/status">Status</a>
+                <a class="nav-button" href="/apply">Apply</a>
+
+        {% if user %}
+            
+            {% if "1409539465021624350" in user["roles"] or "1469462892955963515" in user["roles"] %}
+
+                <a class="nav-button" href="/review">Review</a>
+                <a class="nav-button" href="/overview">Overview</a>
+                <a class="nav-button" href="/create">Create</a>
+
+            {% endif %}
+
+            <a class="profile-button" href="/profile">
+                <p class="profile-button-text">{{ user.global_name }}</p>
+                <img class="profile-button-avatar" src="https://cdn.discordapp.com/avatars/{{ user.id }}/{{ user.avatar }}.png">
+            </a>
+
+        {% else %}
+            
+            <a class="login-button" href="/login">Login with Discord</a>
+
+        {% endif %}
+        
+        </div>
+
+    </nav>
+
+    <main>
+
+        <h class="title">{{ apps[id]["name"] }}</h>
+        <p class="text">{{ apps[id]["description"] }}</p>
+        <p class="description">{{ apps[id]["info"] }}</p>
+        <br>
+
+        <form action="/submit/{{ id }}" method="POST">
+
+        {% for question_id, question in apps[id]["questions"].items() %}
+            
+            <p class="text">{{ question["name"] }}</p>
+            <p class="description">{{ question["description"] }}</p>
+
+            {% if question["method"] == "text" %}
+
+                <textarea class="text-field" oninput="this.style.height='';this.style.height=this.scrollHeight+'px'" placeholder="Notate your answer here..." name="{{ question_id }}"></textarea>
+
+            {% elif question["method"] == "number" %}
+
+                <input class="number-input" type="text" pattern="[0-9]*" inputmode="numeric" placeholder="Give a number..." name="{{ question_id }}">
+
+            {% elif question["method"] == "name" %}
+
+                <input class="text-input" type="text" placeholder="Give a name..." name="{{ question_id }}">
+
+            {% elif question["method"] == "rate" %}
+
+                <div class="rate">
+                    <input type="radio" name="{{ question_id }}" value="1" id="rate{{ question_id }}1"><label class="button" for="rate{{ question_id }}1">1</label>
+                    <input type="radio" name="{{ question_id }}" value="2" id="rate{{ question_id }}2"><label class="button" for="rate{{ question_id }}2">2</label>
+                    <input type="radio" name="{{ question_id }}" value="3" id="rate{{ question_id }}3"><label class="button" for="rate{{ question_id }}3">3</label>
+                    <input type="radio" name="{{ question_id }}" value="4" id="rate{{ question_id }}4"><label class="button" for="rate{{ question_id }}4">4</label>
+                    <input type="radio" name="{{ question_id }}" value="5" id="rate{{ question_id }}5"><label class="button" for="rate{{ question_id }}5">5</label>
+                    <input type="radio" name="{{ question_id }}" value="6" id="rate{{ question_id }}6"><label class="button" for="rate{{ question_id }}6">6</label>
+                    <input type="radio" name="{{ question_id }}" value="7" id="rate{{ question_id }}7"><label class="button" for="rate{{ question_id }}7">7</label>
+                    <input type="radio" name="{{ question_id }}" value="8" id="rate{{ question_id }}8"><label class="button" for="rate{{ question_id }}8">8</label>
+                    <input type="radio" name="{{ question_id }}" value="9" id="rate{{ question_id }}9"><label class="button" for="rate{{ question_id }}9">9</label>
+                    <input type="radio" name="{{ question_id }}" value="10" id="rate{{ question_id }}10"><label class="button" for="rate{{ question_id }}10">10</label>
+                </div>
+
+            {% endif %}
+
+        {% endfor %}
+
+            <button class="button" type="submit">Submit</button>
+        
+        </form>
+
+    </main>
+
+</body>
+</html>
